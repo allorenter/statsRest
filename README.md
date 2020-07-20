@@ -1,1 +1,1 @@
-statsRest
+football-stats-rest
