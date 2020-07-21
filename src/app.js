@@ -10,6 +10,7 @@ const app = express();
 
 //archivos de rutas
 import testRouter from "./components/test/test.routes";
+import downloadRouter from "./components/download/download.routes";
 
 //middlewares
 app.use(logger("dev"));
@@ -20,6 +21,7 @@ app.use(cors());
 app.use(helmet());
 
 app.use("/api/test", testRouter);
+app.use("/api/download-matches", downloadRouter);
 
 //prueba de conexión a la base de datos
 const MONGODB_URL = process.env.MONGODB_URL;
