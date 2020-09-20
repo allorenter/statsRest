@@ -3,8 +3,6 @@ import DownloadController from "./download.controller";
 
 var router = express.Router();
 
-router.get("/descarga", async function (req, res, next) {  
-  
-});
+router.post("/download", DownloadController.executeDownload);
 
 export default router;
