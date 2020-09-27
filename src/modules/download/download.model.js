@@ -5,8 +5,8 @@ const Schema = mongoose.Schema;
 const DownloadSchema = new Schema({
     date : Date,
     executionTime : Number,
-    errs : Array,
-    numInserts : Number
+    numInserts : Number,
+    errs : Array
 }); 
 
 export default mongoose.model("downloads", DownloadSchema);

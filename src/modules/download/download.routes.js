@@ -5,4 +5,6 @@ var router = express.Router();
 
 router.post("/download", DownloadController.executeDownload);
 
+router.get("/last-download", DownloadController.getLastDownload);
+
 export default router;

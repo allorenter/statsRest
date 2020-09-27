@@ -1,5 +1,5 @@
 /**
- * Dirección donde están alojados los archivos CSV con la información de los partidos
+ * Dirección donde descargamos los archivos CSV con la información de los partidos
  * 
  */
 export const URL_DOWNLOAD_SERVER = "http://www.football-data.co.uk/mmz4281/";
@@ -17,7 +17,8 @@ export const ACTUAL_YEAR = 2021;
 export const ALLOW_COMPETITIONS = {
     "E0" : "Premier League" ,
     "SP1" : "Liga Española",
-    "I1" : "Serie A"
+    "I1" : "Serie A",
+    "G1" : "Superliga Griega"
 };
 
 /**

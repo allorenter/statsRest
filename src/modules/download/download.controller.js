@@ -1,8 +1,9 @@
 import DownloadService from "./download.service";
 
-exports.executeDownload = async function (req, res, next) {    
+const downloadService = DownloadService();
+
+exports.executeDownload = async (req, res, next) => {    
     try {
-        const downloadService = DownloadService();
         downloadService.executeDownload();
         return res.status(200).json({ status: 200, message: "Descarga iniciada" });
     } catch (e) {
@@ -11,3 +12,6 @@ exports.executeDownload = async function (req, res, next) {
     }
 }
 
+exports.getLastDownload = async (req, res, next) => {
+    return res.status(200).json({ status: 200, message: "Última descarga", result: await downloadService.getLastDownload() });
+}

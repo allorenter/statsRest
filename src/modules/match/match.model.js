@@ -6,6 +6,7 @@ const MatchSchema = new Schema({
   Division: String,
   Date: String,
   Time: String,
+  HomeTeam: String,
   AwayTeam: String,
   FTHG: Number,
   FTAG: Number,
@@ -108,5 +109,7 @@ const MatchSchema = new Schema({
   AvgCAHH: Number,
   AvgCAHA: Number,
 });
+
+MatchSchema.index({ Division: 1, Date: 1, HomeTeam: 1, AwayTeam: 1}, { unique: true });
 
 export default mongoose.model("matches", MatchSchema);
