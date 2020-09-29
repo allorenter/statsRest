@@ -15,10 +15,17 @@ export const ACTUAL_YEAR = 2021;
  * 
  */
 export const ALLOW_COMPETITIONS = {
-    "E0" : "Premier League" ,
-    "SP1" : "Liga Española",
-    "I1" : "Serie A",
-    "G1" : "Superliga Griega"
+    "E0": "Premier League" ,
+    "SP1": "Liga Española",
+    "I1": "Serie A",
+    "G1": "Superliga Griega",
+    "SC0": "Liga Escocesa",
+    "D1": "Bundesliga",
+    "F1": "Ligue 1",
+    "N1": "Eredivisie",
+    "B1": "Liga Belga",
+    "P1": "Liga Portuguesa",
+    "T1": "Liga Turca"
 };
 
 /**
