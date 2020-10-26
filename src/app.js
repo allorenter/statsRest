@@ -14,6 +14,8 @@ const app = express();
 //archivos de rutas
 import downloadRouter from "./modules/download/download.routes";
 import competitionRouter from "./modules/competition/competition.routes";
+import statRouter from "./modules/stat/stat.routes";
+import teamRouter from "./modules/team/team.routes";
 
 //middlewares
 app.use(logger("dev"));
@@ -24,6 +26,8 @@ app.use(cors());
 app.use(helmet());
 app.use("/api/download-matches", downloadRouter);
 app.use("/api/competition", competitionRouter);
+app.use("/api/team", teamRouter);
+app.use("/api/stat", statRouter);
 app.use(handleErrors);
 
 //prueba de conexión a la base de datos

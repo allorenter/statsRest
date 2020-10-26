@@ -2,11 +2,19 @@ import CompetitionModel from "./competition.model";
 
 const CompetitionService = () => {
     
-    const insertCompetition = competition => new CompetitionModel(competition).save();
+    const insert = competition => new CompetitionModel(competition).save();
+
+    const get = async() => await CompetitionModel.find();
+
+    const getIds = async() => {
+      const competitions = await CompetitionModel.find({}, "_id");
+      return competitions.map(i=>i._id);
+    };
 
     return Object.freeze({
-       insertCompetition,
-      // getCompetitionById
+      insert,
+      get,
+      getIds
     });
 
 };

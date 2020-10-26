@@ -6,8 +6,6 @@ const MatchService = () => {
     
     const insertMatch = match => new MatchModel(match).save();
 
-    
-
     return Object.freeze({
        insertMatches,
        insertMatch
