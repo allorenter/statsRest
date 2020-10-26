@@ -1,15 +1,14 @@
-import express from "express";
-import TeamController from "./team.controller";
+import express from 'express';
+import TeamController from './team.controller';
 
-var router = express.Router();
+const router = express.Router();
 
-router.get("/prueba", function(req, res, next) {
-    res.json({pppp: "pppp"});
+router.get('/prueba', (req, res, next) => {
+  res.json({ pppp: 'pppp' });
 });
 
-router.post("/create", TeamController.create);
+router.post('/create', TeamController.create);
 
-router.get("/get", TeamController.get);
-
+router.get('/get', TeamController.get);
 
 export default router;

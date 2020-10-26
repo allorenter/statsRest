@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const MatchSchema = new Schema({
   Division: String,
@@ -110,6 +110,8 @@ const MatchSchema = new Schema({
   AvgCAHA: Number,
 });
 
-MatchSchema.index({ Division: 1, Date: 1, HomeTeam: 1, AwayTeam: 1}, { unique: true });
+MatchSchema.index({
+  Division: 1, Date: 1, HomeTeam: 1, AwayTeam: 1,
+}, { unique: true });
 
-export default mongoose.model("matches", MatchSchema);
+export default mongoose.model('matches', MatchSchema);

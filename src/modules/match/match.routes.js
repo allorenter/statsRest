@@ -1,7 +1,6 @@
-import express from "express";
-import MatchController from "./match.controller";
+import express from 'express';
+import MatchController from './match.controller';
 
-var router = express.Router();
-
+const router = express.Router();
 
 export default router;

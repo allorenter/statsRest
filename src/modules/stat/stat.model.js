@@ -1,11 +1,11 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const StatSchema = new Schema({
-    _id : String,
-    name : String,
-    type: String
-}); 
+  _id: String,
+  name: String,
+  type: String,
+});
 
-export default mongoose.model("stats", StatSchema);
+export default mongoose.model('stats', StatSchema);

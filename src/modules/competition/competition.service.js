@@ -1,22 +1,20 @@
-import CompetitionModel from "./competition.model";
+import CompetitionModel from './competition.model';
 
 const CompetitionService = () => {
-    
-    const insert = competition => new CompetitionModel(competition).save();
+  const insert = (competition) => new CompetitionModel(competition).save();
 
-    const get = async() => await CompetitionModel.find();
+  const get = async () => await CompetitionModel.find();
 
-    const getIds = async() => {
-      const competitions = await CompetitionModel.find({}, "_id");
-      return competitions.map(i=>i._id);
-    };
+  const getIds = async () => {
+    const competitions = await CompetitionModel.find({}, '_id');
+    return competitions.map((i) => i._id);
+  };
 
-    return Object.freeze({
-      insert,
-      get,
-      getIds
-    });
-
+  return Object.freeze({
+    insert,
+    get,
+    getIds,
+  });
 };
 
 export default CompetitionService;

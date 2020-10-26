@@ -1,12 +1,12 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const DownloadSchema = new Schema({
-    date : Date,
-    executionTime : Number,
-    numInserts : Number,
-    errs : Array
-}); 
+  date: Date,
+  executionTime: Number,
+  numInserts: Number,
+  errs: Array,
+});
 
-export default mongoose.model("downloads", DownloadSchema);
+export default mongoose.model('downloads', DownloadSchema);
