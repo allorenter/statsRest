@@ -6,10 +6,20 @@ exports.executeDownload = async (req, res, next) => {
   try {
     downloadService.executeDownload();
     return res.status(200).json({ status: 200, message: 'Descarga iniciada' });
-  } catch (e) {
-    console.log(e);
-    return res.status(400).json({ status: 400, message: e.message });
+  } catch (err) {
+    next(err);
+    return null;
   }
 };
 
-exports.getLastDownload = async (req, res, next) => res.status(200).json({ status: 200, message: 'Última descarga', result: await downloadService.getLastDownload() });
+exports.getLastDownload = async (req, res) => res.status(200).json({ status: 200, message: 'Última descarga', result: await downloadService.getLastDownload() });
+
+exports.prueba = async (req, res, next) => {
+  try {
+    return res.status(200).json({ status: 200, message: 'Actual season', data: await downloadService.allSeasons(['E0']) });
+  } catch (err) {
+    next(err);
+    console.log('eoroororororoor', err);
+    return null;
+  }
+};

@@ -3,7 +3,7 @@ import CompetitionModel from './competition.model';
 const CompetitionService = () => {
   const insert = (competition) => new CompetitionModel(competition).save();
 
-  const get = async () => await CompetitionModel.find();
+  const get = async () => CompetitionModel.find();
 
   const getIds = async () => {
     const competitions = await CompetitionModel.find({}, '_id');

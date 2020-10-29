@@ -1,6 +1,6 @@
 import { GeneralError } from '../utils/errors';
 
-const handleErrors = (err, req, res, next) => {
+const handleErrors = (err, req, res) => {
   if (err instanceof GeneralError) {
     return res.status(err.getCode()).json({
       status: 'error',

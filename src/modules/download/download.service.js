@@ -4,12 +4,14 @@ import { mapKeys } from 'lodash';
 import DownloadModel from './download.model';
 import MatchService from '../match/match.service';
 import CompetitionService from '../competition/competition.service';
+// import isArrayNotEmpty from '../../utils/functions';
 
 const DownloadService = () => {
   const date = new Date();
 
   /**
-     * Renombra algunas de las claves de las columnas del CSV descargado porque tienen nombres que pueden dar problemas con JS
+     * Renombra algunas de las claves de las columnas del CSV descargado porque
+     * tienen nombres que pueden dar problemas con JS
      *
      */
   const renameKeys = (objMatch) => {
@@ -32,7 +34,7 @@ const DownloadService = () => {
       'AvgC>2.5': 'AvgC025',
       'AvgC<2.5': 'AvgCU25',
     };
-    mapKeys(objMatch, (value, key) => renamedProperties[key] || key);
+    return mapKeys(objMatch, (value, key) => renamedProperties[key] || key);
   };
 
   /**
@@ -40,7 +42,7 @@ const DownloadService = () => {
     *
     */
   const downloadCsv = (year, competition) => new Promise((resolve, reject) => {
-    // Genera un string con el formato correcto de la temporada que hay que usar para descargar el CSV
+    // Genera un string con el formato correcto de la temporada que hay que usar para la descarga
     const season = (year - 1).toString().substr(2).concat(year.toString().substr(2));
     const results = [];
     const url = `${process.env.URL_DOWNLOAD_SERVER + season}/${competition}.csv`;
@@ -48,7 +50,7 @@ const DownloadService = () => {
     http.get(url, (data) => {
       data
         .pipe(csv())
-        .on('data', (data) => { results.push(renameKeys(data)); })
+        .on('data', (downloadedData) => results.push(renameKeys(downloadedData)))
         .on('end', () => resolve(results))
         .on('error', (err) => reject(err));
     }).on('error', (err) => reject(err));
@@ -58,32 +60,23 @@ const DownloadService = () => {
     * Descarga los partidos de la temporada actual para las competiciones especificadas
     *
     */
-  const actualSeason = (competitions) => new Promise(async (resolve, reject) => {
-    const results = [];
-    for (const competition of competitions) {
-      const matches = await downloadCsv(process.env.ACTUAL_YEAR, competition);
-      results.push(...matches);
-    }
-    resolve(results);
-  });
+  const actualSeason = async (competitions) => Promise.all(
+    competitions.map(async (competition) => downloadCsv(process.env.ACTUAL_YEAR, competition)),
+  );
 
   /**
     * Descarga los partidos de todas las temporadas disponibles para las competiciones especificadas
     *
     */
-  const allSeasons = (competitions) => new Promise(async (resolve, reject) => {
-    // año de la primera temporada disponible para descargar
-    const firstYear = 1994;
-    const results = [];
-    for (const competition of competitions) {
-      // hago un bucle para obtener todas las temporadas de esa competicion desde la primera disponible a la actual
-      for (let year = firstYear; year <= process.env.ACTUAL_YEAR; year++) {
-        const matches = await downloadCsv(year, competition);
-        results.push(...matches);
-      }
+  const allSeasons = (competitions) => {
+    const promises = [];
+    for (let year = process.env.FIRST_YEAR; year <= process.env.ACTUAL_YEAR; year += 1) {
+      promises.push(
+        ...competitions.map(async (competition) => downloadCsv(year, competition)),
+      );
     }
-    resolve(results);
-  });
+    return Promise.all(promises);
+  };
 
   /**
     * Guarda los datos de la descarga en base de datos
@@ -122,12 +115,12 @@ const DownloadService = () => {
       const competitionService = CompetitionService();
       const competitions = await competitionService.getIds();
       const matchService = MatchService();
-      const downloadedMatches = downloadType == 'all' ? await allSeasons(competitions) : await actualSeason(competitions);
+      const downloadedMatches = downloadType === 'all' ? await allSeasons(competitions) : await actualSeason(competitions);
       const download = await matchService.insertMatches(downloadedMatches);
       await saveDownloadInfo(download.length || 0);
     } catch (e) {
       // Me quedo solo con los errores que no sean 11000, Duplicate key entry
-      const errs = e.writeErrors.filter((err) => err.code != 11000);
+      const errs = e.writeErrors.filter((err) => err.code !== 11000);
       await saveDownloadInfo(e.insertedDocs.length || 0, errs);
     }
     console.log('TERMINA DESCARGA');

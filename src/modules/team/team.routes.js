@@ -3,7 +3,7 @@ import TeamController from './team.controller';
 
 const router = express.Router();
 
-router.get('/prueba', (req, res, next) => {
+router.get('/prueba', (req, res) => {
   res.json({ pppp: 'pppp' });
 });
 

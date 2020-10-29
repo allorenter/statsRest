@@ -14,6 +14,7 @@ exports.create = async (req, res, next) => {
     return succesResponse(res, 'Competicion creada', competition);
   } catch (err) {
     next(err);
+    return null;
   }
 };
 
@@ -23,5 +24,6 @@ exports.get = async (req, res, next) => {
     return succesResponse(res, 'Competiciones disponibles', competitions);
   } catch (err) {
     next(err);
+    return null;
   }
 };
