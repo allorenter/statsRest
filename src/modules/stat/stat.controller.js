@@ -1,5 +1,5 @@
 import StatService from './stat.service';
-import { BadRequest } from '../../utils/errors';
+import BadRequest from '../../utils/errors/bad-request';
 import succesResponse from '../../utils/response';
 
 const statService = StatService();

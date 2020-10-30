@@ -1,5 +1,5 @@
 import CompetitionService from './competition.service';
-import { BadRequest } from '../../utils/errors';
+import BadRequest from '../../utils/errors/bad-request';
 import succesResponse from '../../utils/response';
 
 const competitionService = CompetitionService();

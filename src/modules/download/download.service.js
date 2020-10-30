@@ -5,7 +5,7 @@ import DownloadModel from './download.model';
 import MatchService from '../match/match.service';
 import CompetitionService from '../competition/competition.service';
 import isArrayNotEmpty from '../../utils/functions';
-import { InvalidCompetititons } from '../../utils/errors';
+import InvalidCompetititons from '../../utils/errors/invalid-competitions';
 
 const DownloadService = () => {
   const date = new Date();

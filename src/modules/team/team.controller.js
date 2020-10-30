@@ -1,5 +1,5 @@
 import TeamService from './team.service';
-import { BadRequest } from '../../utils/errors';
+import BadRequest from '../../utils/errors/bad-request';
 import succesResponse from '../../utils/response';
 
 const teamService = TeamService();
