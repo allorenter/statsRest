@@ -17,6 +17,7 @@ exports.create = async (req, res, next) => {
     return succesResponse(res, 'Equipo creado', team);
   } catch (err) {
     next(err);
+    return null;
   }
 };
 
@@ -26,5 +27,6 @@ exports.get = async (req, res, next) => {
     return succesResponse(res, 'Equipos disponibles', teams);
   } catch (err) {
     next(err);
+    return null;
   }
 };

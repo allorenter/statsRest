@@ -3,5 +3,8 @@
     "parser": "babel-eslint",
     "rules": {
         "linebreak-style": 0,
+        "no-underscore-dangle": ["error", { "allow": ["_id"] }],
+        "no-console": "off",
+        "max-classes-per-file": ["error", 5]
     }
 }

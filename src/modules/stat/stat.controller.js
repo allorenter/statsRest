@@ -18,6 +18,7 @@ exports.create = async (req, res, next) => {
     return succesResponse(res, 'Estadística creada', stat);
   } catch (err) {
     next(err);
+    return null;
   }
 };
 
@@ -27,5 +28,6 @@ exports.get = async (req, res, next) => {
     return succesResponse(res, 'Estadísticas disponibles', stats);
   } catch (err) {
     next(err);
+    return null;
   }
 };

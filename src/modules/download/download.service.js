@@ -4,7 +4,8 @@ import { mapKeys } from 'lodash';
 import DownloadModel from './download.model';
 import MatchService from '../match/match.service';
 import CompetitionService from '../competition/competition.service';
-// import isArrayNotEmpty from '../../utils/functions';
+import isArrayNotEmpty from '../../utils/functions';
+import { InvalidCompetititons } from '../../utils/errors';
 
 const DownloadService = () => {
   const date = new Date();
@@ -114,14 +115,22 @@ const DownloadService = () => {
       // Competiciones a descargar
       const competitionService = CompetitionService();
       const competitions = await competitionService.getIds();
+      if (!isArrayNotEmpty(competitions)) {
+        throw new InvalidCompetititons('Array de competiciones vacío', competitions);
+      }
+      // Descarga e insercción de los partidos
       const matchService = MatchService();
       const downloadedMatches = downloadType === 'all' ? await allSeasons(competitions) : await actualSeason(competitions);
       const download = await matchService.insertMatches(downloadedMatches);
       await saveDownloadInfo(download.length || 0);
     } catch (e) {
-      // Me quedo solo con los errores que no sean 11000, Duplicate key entry
-      const errs = e.writeErrors.filter((err) => err.code !== 11000);
-      await saveDownloadInfo(e.insertedDocs.length || 0, errs);
+      if (e instanceof InvalidCompetititons) {
+        await saveDownloadInfo(0, [e.getFormat()]);
+      } else {
+        // Me quedo solo con los errores que no sean 11000, Duplicate key entry
+        const errs = e.writeErrors.filter((err) => err.code !== 11000);
+        await saveDownloadInfo(e.insertedDocs.length || 0, errs);
+      }
     }
     console.log('TERMINA DESCARGA');
   };
