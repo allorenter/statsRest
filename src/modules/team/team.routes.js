@@ -11,4 +11,6 @@ router.post('/create', TeamController.create);
 
 router.get('/get', TeamController.get);
 
+router.get('/get-by-season-competition/:season/:competition', TeamController.getBySeasonCompetition);
+
 export default router;

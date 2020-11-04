@@ -6,11 +6,11 @@ const competitionService = CompetitionService();
 
 exports.create = async (req, res, next) => {
   try {
-    const { id, name } = req.body;
-    if (!id || !name) {
-      throw new BadRequest('Id y nombre requeridos');
+    const { _id, name } = req.body;
+    if (!_id || !name) {
+      throw new BadRequest('_id y name requeridos');
     }
-    const competition = await competitionService.insert({ _id: id.toUpperCase(), name });
+    const competition = await competitionService.insert({ _id: _id.toUpperCase(), name });
     return succesResponse(res, 'Competicion creada', competition);
   } catch (err) {
     next(err);

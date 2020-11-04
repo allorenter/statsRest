@@ -1,41 +1,51 @@
 import csv from 'csv-parser';
 import http from 'http';
-import { mapKeys } from 'lodash';
+import { mapKeys, flattenDeep } from 'lodash';
 import DownloadModel from './download.model';
 import MatchService from '../match/match.service';
 import CompetitionService from '../competition/competition.service';
-import isArrayNotEmpty from '../../utils/functions';
+import { isArrayNotEmpty, yearToSeason, lowerCaseString } from '../../utils/functions';
 import InvalidCompetititons from '../../utils/errors/invalid-competitions';
 
 const DownloadService = () => {
   const date = new Date();
+  // año de la primera temporada con datos para descargar
+  const firsYear = parseInt(process.env.FIRST_YEAR, 10);
+  // año de la temporada actual
+  const actualYear = parseInt(process.env.ACTUAL_YEAR, 10);
+  // Indica si la tarea descargará los partidos de todas las temporadas o solo de la actual
+  const downloadType = process.env.DOWNLOAD_TYPE;
 
   /**
      * Renombra algunas de las claves de las columnas del CSV descargado porque
      * tienen nombres que pueden dar problemas con JS
      *
      */
-  const renameKeys = (objMatch) => {
+  const formatData = (objMatch) => {
     const renamedProperties = {
-      Div: 'Division',
-      'B365>2.5': 'B365O25',
-      'B365<2.5': 'B365U25',
-      'P>2.5': 'PO25',
-      'P<2.5': 'PU25',
-      'Max>2.5': 'MaxO25',
-      'Max<2.5': 'MaxU25',
-      'Avg>2.5': 'AvgO25',
-      'Avg<2.5': 'AvgU25',
-      'B365C>2.5': 'B365CO25',
-      'B365C<2.5': 'B365CU25',
-      'PC>2.5': 'PCO25',
-      'PC<2.5': 'PCU25',
-      'MaxC>2.5': 'MaxCO25',
-      'MaxC<2.5': 'MaxCU25',
-      'AvgC>2.5': 'AvgC025',
-      'AvgC<2.5': 'AvgCU25',
+      Div: 'competition',
+      Date: 'matchDate',
+      'B365>2.5': 'b365o25',
+      'B365<2.5': 'b365u25',
+      'P>2.5': 'po25',
+      'P<2.5': 'pu25',
+      'Max>2.5': 'maxo25',
+      'Max<2.5': 'maxu25',
+      'Avg>2.5': 'avgo25',
+      'Avg<2.5': 'avgu25',
+      'B365C>2.5': 'b365co25',
+      'B365C<2.5': 'b365cu25',
+      'PC>2.5': 'pco25',
+      'PC<2.5': 'pcu25',
+      'MaxC>2.5': 'maxco25',
+      'MaxC<2.5': 'maxcu25',
+      'AvgC>2.5': 'avgc025',
+      'AvgC<2.5': 'avgcu25',
     };
-    return mapKeys(objMatch, (value, key) => renamedProperties[key] || key);
+    const match = objMatch;
+    const arrDates = match.Date.split('/');
+    match.Date = new Date(arrDates[2], arrDates[1] - 1, arrDates[0]);
+    return mapKeys(match, (value, key) => lowerCaseString(renamedProperties[key] || key));
   };
 
   /**
@@ -44,14 +54,14 @@ const DownloadService = () => {
     */
   const downloadCsv = (year, competition) => new Promise((resolve, reject) => {
     // Genera un string con el formato correcto de la temporada que hay que usar para la descarga
-    const season = (year - 1).toString().substr(2).concat(year.toString().substr(2));
+    const season = yearToSeason(year);
     const results = [];
     const url = `${process.env.URL_DOWNLOAD_SERVER + season}/${competition}.csv`;
     console.log('DOWNLOAD', url);
     http.get(url, (data) => {
       data
         .pipe(csv())
-        .on('data', (downloadedData) => results.push(renameKeys(downloadedData)))
+        .on('data', (downloadedData) => results.push(formatData(downloadedData)))
         .on('end', () => resolve(results))
         .on('error', (err) => reject(err));
     }).on('error', (err) => reject(err));
@@ -61,9 +71,12 @@ const DownloadService = () => {
     * Descarga los partidos de la temporada actual para las competiciones especificadas
     *
     */
-  const actualSeason = async (competitions) => Promise.all(
-    competitions.map(async (competition) => downloadCsv(process.env.ACTUAL_YEAR, competition)),
-  );
+  const actualSeason = async (competitions) => {
+    const promises = competitions.map(
+      async (competition) => downloadCsv(actualYear, competition),
+    );
+    return Promise.all(promises);
+  };
 
   /**
     * Descarga los partidos de todas las temporadas disponibles para las competiciones especificadas
@@ -71,7 +84,7 @@ const DownloadService = () => {
     */
   const allSeasons = (competitions) => {
     const promises = [];
-    for (let year = process.env.FIRST_YEAR; year <= process.env.ACTUAL_YEAR; year += 1) {
+    for (let year = firsYear; year <= actualYear; year += 1) {
       promises.push(
         ...competitions.map(async (competition) => downloadCsv(year, competition)),
       );
@@ -108,10 +121,7 @@ const DownloadService = () => {
     *
     */
   const executeDownload = async () => {
-    console.log('EMPIEZA DESCARGA');
     try {
-      // Indica si la tarea descargará los partidos de todas las temporadas o solo de la actual
-      const downloadType = process.env.DOWNLOAD_TYPE;
       // Competiciones a descargar
       const competitionService = CompetitionService();
       const competitions = await competitionService.getIds();
@@ -121,7 +131,7 @@ const DownloadService = () => {
       // Descarga e insercción de los partidos
       const matchService = MatchService();
       const downloadedMatches = downloadType === 'all' ? await allSeasons(competitions) : await actualSeason(competitions);
-      const download = await matchService.insertMatches(downloadedMatches);
+      const download = await matchService.insertMatches(flattenDeep(downloadedMatches));
       await saveDownloadInfo(download.length || 0);
     } catch (e) {
       if (e instanceof InvalidCompetititons) {
@@ -132,12 +142,9 @@ const DownloadService = () => {
         await saveDownloadInfo(e.insertedDocs.length || 0, errs);
       }
     }
-    console.log('TERMINA DESCARGA');
   };
 
   return Object.freeze({
-    actualSeason,
-    allSeasons,
     getLastDownload,
     executeDownload,
   });
