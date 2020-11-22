@@ -15,6 +15,7 @@ import competitionRouter from './modules/competition/competition.routes';
 import statRouter from './modules/stat/stat.routes';
 import teamRouter from './modules/team/team.routes';
 import matchRouter from './modules/match/match.routes';
+import refereeRouter from './modules/referee/referee.routes';
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use('/api/competition', competitionRouter);
 app.use('/api/team', teamRouter);
 app.use('/api/stat', statRouter);
 app.use('/api/match', matchRouter);
+app.use('/api/referee', refereeRouter);
 app.use(handleErrors);
 
 // prueba de conexión a la base de datos

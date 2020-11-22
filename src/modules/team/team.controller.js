@@ -7,12 +7,12 @@ const teamService = TeamService();
 
 exports.create = async (req, res, next) => {
   try {
-    const { id, name } = req.body;
-    if (!id || !name) {
+    const { _id, name } = req.body;
+    if (!_id || !name) {
       throw new BadRequest('Id y name requeridos');
     }
     const team = await teamService.insert({
-      _id: id,
+      _id,
       name,
     });
     return succesResponse(res, 'Equipo creado', team);

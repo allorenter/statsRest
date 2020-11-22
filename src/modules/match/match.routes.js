@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/get', MatchController.get);
 
-router.get('/get-by-competition/:id', MatchController.getByCompetition);
+router.get('/get-by-competition/:_id', MatchController.getByCompetition);
 
 router.get('/get-by-season/:season', MatchController.getBySeason);
 

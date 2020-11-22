@@ -5,6 +5,8 @@ const CompetitionService = () => {
 
   const get = async () => CompetitionModel.find();
 
+  const deleteCompetition = async (_id) => CompetitionModel.deleteOne({ _id });
+
   const getIds = async () => {
     const competitions = await CompetitionModel.find({}, '_id');
     return competitions.map((i) => i._id);
@@ -14,6 +16,7 @@ const CompetitionService = () => {
     insert,
     get,
     getIds,
+    deleteCompetition,
   });
 };
 

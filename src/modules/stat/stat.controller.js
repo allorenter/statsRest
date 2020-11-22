@@ -6,12 +6,12 @@ const statService = StatService();
 
 exports.create = async (req, res, next) => {
   try {
-    const { id, name, type } = req.body;
-    if (!id || !name || !type) {
+    const { _id, name, type } = req.body;
+    if (!_id || !name || !type) {
       throw new BadRequest('Id, name y type requeridos');
     }
     const stat = await statService.insert({
-      _id: id,
+      _id,
       name,
       type,
     });

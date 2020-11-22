@@ -81,7 +81,6 @@ const MatchService = () => {
       if (a._id < b._id) {
         return -1;
       }
-      // a must be equal to b
       return 0;
     });
   };

@@ -27,3 +27,14 @@ exports.get = async (req, res, next) => {
     return null;
   }
 };
+
+exports.deleteCompetition = async (req, res, next) => {
+  try {
+    const { _id } = req.params;
+    const deleted = await competitionService.deleteCompetition(_id);
+    return succesResponse(res, 'Competición eliminada', deleted);
+  } catch (err) {
+    next(err);
+    return null;
+  }
+};

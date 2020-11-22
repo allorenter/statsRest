@@ -17,11 +17,11 @@ exports.get = async (req, res, next) => {
 
 exports.getByCompetition = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    if (!id) {
+    const { _id } = req.params;
+    if (!_id) {
       throw new BadRequest('Id de la competicion requerido');
     }
-    const matches = await matchService.getByCompetition(id);
+    const matches = await matchService.getByCompetition(_id);
     return succesResponse(res, 'Partidos', matches);
   } catch (err) {
     next(err);
