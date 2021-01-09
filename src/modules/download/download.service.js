@@ -43,8 +43,10 @@ const DownloadService = () => {
       'AvgC<2.5': 'avgcu25',
     };
     const match = objMatch;
-    const arrDates = match.Date.split('/');
-    match.Date = new Date(arrDates[2], arrDates[1] - 1, arrDates[0]);
+    if (match.Date) {
+      const arrDates = match.Date.split('/');
+      match.Date = new Date(arrDates[2], arrDates[1] - 1, arrDates[0]);
+    }
     return mapKeys(match, (value, key) => lowerCaseString(renamedProperties[key] || key));
   };
 
@@ -72,9 +74,7 @@ const DownloadService = () => {
     *
     */
   const actualSeason = async (competitions) => {
-    const promises = competitions.map(
-      async (competition) => downloadCsv(actualYear, competition),
-    );
+    const promises = competitions.map(async (competition) => downloadCsv(actualYear, competition));
     return Promise.all(promises);
   };
 
@@ -85,9 +85,7 @@ const DownloadService = () => {
   const allSeasons = (competitions) => {
     const promises = [];
     for (let year = firsYear; year <= actualYear; year += 1) {
-      promises.push(
-        ...competitions.map(async (competition) => downloadCsv(year, competition)),
-      );
+      promises.push(...competitions.map(async (competition) => downloadCsv(year, competition)));
     }
     return Promise.all(promises);
   };

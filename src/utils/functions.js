@@ -89,6 +89,7 @@ export const lowerCaseString = (str) => str.toLowerCase();
  * @param {String} season
  * @param {String} competition
  */
+
 export const getFilterSeasonCompetition = (season, competition) => {
   if (!isValidSeason(season)) {
     return false;
@@ -100,5 +101,14 @@ export const getFilterSeasonCompetition = (season, competition) => {
       $lt: datesCompetition.finishDate,
     },
     competition,
+  };
+};
+
+export const getFilterSeasonsCompetition = (seasons, competition) => {
+  if (!isArrayNotEmpty(seasons)) {
+    return false;
+  }
+  return {
+    $or: seasons.map((season) => getFilterSeasonCompetition(season, competition)),
   };
 };

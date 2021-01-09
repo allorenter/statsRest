@@ -11,6 +11,4 @@ router.get('/get-by-season/:season', MatchController.getBySeason);
 
 router.get('/get-by-season-competition/:season/:competition', MatchController.getBySeasonCompetition);
 
-router.get('/get-avg-stats-teams/:season/:competition/:stat', MatchController.getAvgStatsTeams);
-
 export default router;

@@ -30,3 +30,28 @@ exports.get = async (req, res, next) => {
     return null;
   }
 };
+
+exports.getByCompetition = async (req, res, next) => {
+  try {
+    const { competition } = req.params;
+    if (!competition) {
+      throw new BadRequest('Competición requerida');
+    }
+    return succesResponse(res, 'Arbitros de la competición', await refereeService.getByCompetition(competition));
+  } catch (err) {
+    next(err);
+    return null;
+  }
+};
+
+exports.getBySeasonCompetition = async (req, res, next) => {
+  try {
+    // VALIDARLO BIEN
+    const competition = req.body.competition || 'E0';
+    const seasons = ['2021'];
+    return succesResponse(res, 'Arbitros de la competicion', await refereeService.getBySeasonsCompetition(seasons, competition));
+  } catch (err) {
+    next(err);
+    return null;
+  }
+};

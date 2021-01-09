@@ -56,18 +56,3 @@ exports.getBySeasonCompetition = async (req, res, next) => {
     return null;
   }
 };
-
-exports.getAvgStatsTeams = async (req, res, next) => {
-  try {
-    const { season, competition, stat } = req.params;
-    if (!isValidSeason(season) || !competition || !stat) {
-      throw new BadRequest('Campos requeridos incorrectos');
-    }
-    console.log(req.params);
-    const result = await matchService.getAvgStatTeams(season, competition, stat);
-    return succesResponse(res, 'Competiciones disponibles', result);
-  } catch (err) {
-    next(err);
-    return null;
-  }
-};
