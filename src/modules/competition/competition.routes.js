@@ -1,9 +1,12 @@
-import express from "express";
-import CompetitionController from "./competition.controller";
+import express from 'express';
+import CompetitionController from './competition.controller';
 
-var router = express.Router();
+const router = express.Router();
 
-router.post("/create", CompetitionController.create);
+router.post('/create', CompetitionController.create);
 
+router.delete('/delete/:_id', CompetitionController.deleteCompetition);
+
+router.get('/get', CompetitionController.get);
 
 export default router;

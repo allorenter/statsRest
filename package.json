@@ -10,7 +10,9 @@
     "clean": "rimraf dist",
     "build": "babel ./src --out-dir dist",
     "watch": "nodemon",
-    "debug": "nodemon --inspect"
+    "debug": "nodemon --inspect",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "repository": {
     "type": "git",
@@ -30,6 +32,7 @@
     "cron": "^1.8.2",
     "cross-env": "^7.0.2",
     "csv-parser": "^2.3.3",
+    "debug": "^4.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "helmet": "^3.23.3",
@@ -48,6 +51,14 @@
     "@babel/core": "^7.10.3",
     "@babel/node": "^7.10.3",
     "@babel/preset-env": "^7.10.3",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-jsx-a11y": "^6.3.0",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.0.0",
     "nodemon": "^2.0.4"
   }
 }

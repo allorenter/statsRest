@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-const CompetitionSchema = new Schema({
+const StatSchema = new Schema({
   _id: String,
   name: String,
 });
 
-export default mongoose.model('competition', CompetitionSchema);
+export default mongoose.model('teams', StatSchema);
