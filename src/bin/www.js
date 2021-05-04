@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-
+import '@babel/polyfill';
 import debugLib from 'debug';
 import http from 'http';
 import app from '../app';

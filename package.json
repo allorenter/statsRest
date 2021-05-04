@@ -8,11 +8,12 @@
     "server": "babel-node ./src/bin/www",
     "dev": "cross-env NODE_ENV=development npm-run-all server",
     "clean": "rimraf dist",
-    "build": "babel ./src --out-dir dist",
+    "build": "npm run clean && babel ./src --out-dir dist",
     "watch": "nodemon",
     "debug": "nodemon --inspect",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "start": "npm run build && node ./dist/bin/www.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
   },
   "homepage": "https://github.com/allorenter/statsRest#readme",
   "dependencies": {
+    "@babel/polyfill": "^7.12.1",
     "babel-cli": "^6.26.0",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
