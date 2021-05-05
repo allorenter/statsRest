@@ -53,7 +53,7 @@ exports.getAvgStat = async (req, res, next) => {
       throw new BadRequest('Campos requeridos incorrectos');
     }
     const result = await teamService.getAvgStat(season, competition, stat);
-    return succesResponse(res, 'Competiciones disponibles', result);
+    return succesResponse(res, 'Datos disponibles', result);
   } catch (err) {
     next(err);
     return null;
