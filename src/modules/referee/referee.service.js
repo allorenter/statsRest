@@ -36,20 +36,22 @@ const RefereeService = () => {
           },
         },
       ]);
-      return map(referees, (referee) => ({
-        refereeId: referee._id,
-        refereeName: referee._id,
-        yellowCards: {
-          homeTeam: referee.homeYellowCards,
-          awayTeam: referee.awayYellowCards,
-          total: referee.homeYellowCards + referee.awayYellowCards,
-        },
-        redCards: {
-          homeTeam: referee.homeRedCards,
-          awayTeam: referee.awayRedCards,
-          total: referee.homeRedCards + referee.awayRedCards,
-        },
-      }));
+      if (referees.length > 0) {
+        return map(referees, (referee) => ({
+          refereeId: referee._id,
+          refereeName: referee._id,
+          yellowCards: {
+            homeTeam: referee.homeYellowCards,
+            awayTeam: referee.awayYellowCards,
+            total: referee.homeYellowCards + referee.awayYellowCards,
+          },
+          redCards: {
+            homeTeam: referee.homeRedCards,
+            awayTeam: referee.awayRedCards,
+            total: referee.homeRedCards + referee.awayRedCards,
+          },
+        })).filter((refereeData) => refereeData.refereeId !== null);
+      }
     }
     return [];
   };
